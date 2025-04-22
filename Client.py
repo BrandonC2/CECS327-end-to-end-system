@@ -19,6 +19,18 @@ Client:
     4. If all conditions met, wait for server response
     5. Upon successful reply from server, user can continue to message or
        cut connection 
+
+**** For assignment 8:
+        Update your TCP client from Assignment 6 to:
+    • Accept and process the following three queries only:
+    1. What is the average moisture inside my kitchen fridge in the past three hours?
+    2. What is the average water consumption per cycle in my smart dishwasher?
+    3. Which device consumed more electricity among my three IoT devices (two
+    refrigerators and a dishwasher)?
+    • Reject any other input with a user-friendly message, e.g., 'Sorry, this query cannot be
+    processed. Please try one of the following: [list the valid queries].'
+    • Send valid queries to your TCP server for processing.
+    • Display results from the server to the user.
 """
 
 # Messaged to Server Info

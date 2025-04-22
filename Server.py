@@ -12,6 +12,17 @@ import socket
     1. Input a valid/open port
     2. Wait for a client to connect and respond
     3. Server shuts off when client disconnect 
+
+For assignment 8:
+        Update your TCP server from Assignment 6 to:
+    • Connect to the database created in Assignment 7 to retrieve relevant IoT data.
+    • Use metadata for each IoT device created in dataniz to manage and process queries
+    effectively. Metadata might include device ID, data source type, time zone, and unit of
+    measure.
+    • Perform calculations or unit conversions where needed:
+    - Convert moisture readings to RH% (Relative Humidity).
+    - Provide results in PST and imperial units (e.g., gallons, kWh).
+    • Use an efficient data structure (e.g., binary tree) for searching and managing the data
 """
 
 # Server Connection Info
