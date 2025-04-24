@@ -20,7 +20,8 @@ For assignment 8:
     effectively. Metadata might include device ID, data source type, time zone, and unit of
     measure.
     • Perform calculations or unit conversions where needed:
-    - Convert moisture readings to RH% (Relative Humidity).
+    - Convert moisture readings to RH% (Relative Humidity)git
+    .
     - Provide results in PST and imperial units (e.g., gallons, kWh).
     • Use an efficient data structure (e.g., binary tree) for searching and managing the data
 """
@@ -45,7 +46,10 @@ def server():
     # Accept an incoming connection from a client
     incomingSocket, incomingAddress = myTCPSocket.accept()
     print(f"Connection established with {incomingAddress}")
-
+    print("Please select one of the three options by typing only the number \n")
+    print("1. What is the average moisture inside my kitchen fridge in the past three hours? \n")
+    print("2. What is the average water consumption per cycle in my smart dishwasher? \n")
+    print("3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)? \n")
     # infinite runloop until condition to exit is met
     running = True
     while running:
@@ -66,6 +70,14 @@ def server():
             break
 
         print(f"Client sends message: {someData}")
+
+        """
+         In this portion, connect to NeonDB
+         Run queries
+         Get data
+         send to client
+        """
+
 
         # Converts user message to Uppercase, includes exit statement
         someData = ' '.join([someData, "(Enter 'EXIT' to Disconnect from server)"])
