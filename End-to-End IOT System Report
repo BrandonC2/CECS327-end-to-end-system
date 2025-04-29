@@ -1,0 +1,34 @@
+Group 9
+Vincent Carreon
+Brandon Chau
+2 May 2025
+End-to-End IOT System Report
+System architecture and approach summary:
+When approaching an end-to-end Iot system, effectively it can be separated into three parts, a client-server connection, working devices that can send data, and a functional database that takes in the device metadata and sends it to the server which then sends the information to client with queried. To prevent users from sending an invalid query, we would build around a simple prompt to input either 1, 2, or 3 to test each query and 4 to end the server-client connection; otherwise, a message pops up to ask user to send a valid message.
+Research findings on IoT sensors and data:
+Ammeters: Measure the energy, in kWh, used by the device
+Moisture Meters: Measures the moisture content, in relative humidity %, used by the device
+WaterFlow: Measures the amount of water, in gallons, used in a cycle
+Thermistor: Measures the internal temperature, in Farenheit, of the device
+Location: All devices were established to retrieve data in (long, lat) in Santa Cruz, California
+Time: All sensors of each device have been active since April 18, with each sending values at minute intervals
+Dataniz Metadata usage (or lack thereof):
+Effectively, the Dataniz metadata was successfully able to send data collected by the device sensors to a destination database in Neon. 
+Implementation Details (algorithms, calculations, unit conversions, etc.):
+Upon implementation in the code, the server program is fed data from the database which is then compiled into respective algorithms depending on requested query from client. For query 1, finding the average moisture is solved via creating a list of all accumulated moisture values in the given span of three hours and dividing it by the length of such list, providing a mean value. For query 2, like query 1, take all data from the dishwasher and divide it by the total values collected. For query 3, to find which device used the most electricity can be solved by distributing each device their values for their ammeters in respective lists and comparing the sum of each list to each other. 
+Encountered Challenges:
+Primary challenges that came with the project were the initial construction of code to connect it to the databases on Neon. As we had most of the framework for connecting the virtual machines together and have working devices sending data to Neon, most of our time was spent on building/testing the code.
+Dataniz.com Feedback:
+While the initial experiments on Dataniz.com were rough with many bugs and left us unable to really progress on the project, at its best Dataniz is an insightful tool to see a realized ().
+ 
+Queries:
+1.	What is the average moisture inside my kitchen fridge in the past three hours?
+2. What is the average water consumption per cycle in my smart dishwasher?
+3. Which device consumed more electricity among my three IoT devices (two
+refrigerators and a dishwasher)?
+• Reject any other input with a user-friendly message, e.g., 'Sorry, this query cannot be
+processed. Please try one of the following: [list the valid queries].'
+• Send valid queries to your TCP server for processing.
+• Display results from the server to the user.
+
+
