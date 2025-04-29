@@ -92,7 +92,7 @@ def server():
                 cursor.execute("""
                     SELECT
                     AVG((payload->>'DHT11 - Fridge1')::FLOAT) AS avg_moisture
-                    FROM "SmartKitchen_virtual"
+                    FROM "NewKitchen_virtual"
                     WHERE
                     payload->>'board_name' = 'Fridge1'
                     AND "createdAt" >= NOW() - INTERVAL '3 hours';
@@ -113,7 +113,7 @@ def server():
                 cursor.execute("""
                     SELECT
                     AVG((payload->>'YF-S201 - Dishwasher')::FLOAT) AS avg_water_per_cycle
-                    FROM "SmartKitchen_virtual"
+                    FROM "NewKitchen_virtual"
                     WHERE
                     payload->>'board_name' = 'Dishwasher';
                 """)
