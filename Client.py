@@ -95,7 +95,7 @@ def client():
                 print("Server Disconnect")
                 running = False
                 break
-            print("Invalid input. Please select '1', '2', or '3'.")
+            print("Invalid input. Please select '1', '2', or '3'.\n")
             someData = input("Query to send (Enter 'EXIT' to quit): ")
 
         myTCPSocket.send(bytearray(str(someData), encoding="utf-8"))
