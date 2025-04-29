@@ -1,4 +1,14 @@
 import socket
+import psycopg2
+
+conn = psycopg2.connect("postgresql://neondb_owner:npg_gCjvMmcIH24Y@ep-jolly-river-a5huaine-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require")
+
+cursor = conn.cursor()
+
+# goal: create new dataniz account, and set it up correctly. 
+# connect it to the neondb
+# research each sensor and provide the appropriate calculations
+
 """
     Server:
     1.	Receives the message from the client. 
@@ -20,7 +30,7 @@ For assignment 8:
     effectively. Metadata might include device ID, data source type, time zone, and unit of
     measure.
     • Perform calculations or unit conversions where needed:
-    - Convert moisture readings to RH% (Relative Humidity)git
+    - Convert moisture readings to RH% (Relative Humidity)
     .
     - Provide results in PST and imperial units (e.g., gallons, kWh).
     • Use an efficient data structure (e.g., binary tree) for searching and managing the data
@@ -46,10 +56,8 @@ def server():
     # Accept an incoming connection from a client
     incomingSocket, incomingAddress = myTCPSocket.accept()
     print(f"Connection established with {incomingAddress}")
-    print("Please select one of the three options by typing only the number \n")
-    print("1. What is the average moisture inside my kitchen fridge in the past three hours? \n")
-    print("2. What is the average water consumption per cycle in my smart dishwasher? \n")
-    print("3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)? \n")
+    
+    
     # infinite runloop until condition to exit is met
     running = True
     while running:
@@ -65,7 +73,7 @@ def server():
         someData = myData.decode("utf-8")
 
         # Ends loop when EXIT is typed by user (alt case to close server)
-        if someData == "EXIT":
+        if someData.upper() == "EXIT":
             print("Client Disconnect")
             break
 
@@ -77,11 +85,88 @@ def server():
          Get data
          send to client
         """
+        match someData:
+            case "1":
+                print("Executing query #1 \n")
+                #send query to NeonDB
+                cursor.execute("""
+                    SELECT
+                    AVG((payload->>'DHT11 - Fridge1')::FLOAT) AS avg_moisture
+                    FROM "SmartKitchen_virtual"
+                    WHERE
+                    payload->>'board_name' = 'Fridge1'
+                    AND "createdAt" >= NOW() - INTERVAL '3 hours';
+                """)
+                #store the data
+                avg_moisture = cursor.fetchone()[0]
+
+                #condition if there is no data for the last 3 hours
+                if avg_moisture is not None:
+                    someData = f"Average Fridge Moisture (last 3 hours): {avg_moisture:.2f}%\n"
+                else:
+                    someData = "Average Fridge Moisture (last 3 hours): Data not available\n"
 
 
-        # Converts user message to Uppercase, includes exit statement
-        someData = ' '.join([someData, "(Enter 'EXIT' to Disconnect from server)"])
-        someData = someData.upper()
+            case "2":
+                print("Executing query #2 \n")
+                #send query to NeonDB
+                cursor.execute("""
+                    SELECT
+                    AVG((payload->>'YF-S201 - Dishwasher')::FLOAT) AS avg_water_per_cycle
+                    FROM "SmartKitchen_virtual"
+                    WHERE
+                    payload->>'board_name' = 'Dishwasher';
+                """)
+                #store the data
+                avg_water = cursor.fetchone()[0]
+                # Conversion from LPM to GPM
+                avg_water = avg_water * 0.264172
+                someData = (f"Average Dishwasher Water Per Cycle: {avg_water:.2f} GPM\n")
+
+            case "3":
+                print("Executing query #3 \n")
+                #send query to NeonDB
+                #select each 
+                cursor.execute("""
+                    SELECT device, MAX(electricity) AS electricity
+                    FROM (
+                        SELECT 
+                            payload->>'board_name' AS device,
+                            AVG((payload->>'ACS712 - Dishwasher')::FLOAT) AS electricity
+                        FROM "Kitchen_virtual"
+                        WHERE (payload::jsonb) ? 'ACS712 - Dishwasher'
+                        GROUP BY payload->>'board_name'
+                        
+                        UNION ALL
+                        
+                        SELECT 
+                            payload->>'board_name' AS device,
+                            AVG((payload->>'ACS712 - Fridge2')::FLOAT) AS electricity
+                        FROM "Kitchen_virtual"
+                        WHERE (payload::jsonb) ? 'ACS712 - Fridge2'
+                        GROUP BY payload->>'board_name'
+                        
+                        UNION ALL
+                        
+                        SELECT 
+                            payload->>'board_name' AS device,
+                            AVG((payload->>'ACS712 - Fridge1')::FLOAT) AS electricity
+                        FROM "Kitchen_virtual"
+                        WHERE (payload::jsonb) ? 'ACS712 - Fridge1'
+                        GROUP BY payload->>'board_name'
+                    ) AS all_data
+                    GROUP BY device
+                    ORDER BY electricity DESC
+                    LIMIT 1;
+
+                """)
+                result = cursor.fetchone()
+                device = result[0] if result and result[0] is not None else "Unknown"
+                electricity = result[1] if result and result[1] is not None else 0.0
+                # Conversion from Amps to kWh
+                electricity = electricity * 5/ 1000
+                someData = (f"Highest Electricity Consumer: {device} ({electricity:.2f} kW average per cycle)\n")
+            
 
         # Send the updated uppercase data back to client as response
         incomingSocket.send(bytearray(someData, encoding="utf-8"))
