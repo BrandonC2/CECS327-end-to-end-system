@@ -19,7 +19,7 @@ This program is designed to fetch data from NeonDB which is created through Data
 
 
 
-# To get create your own,
+# To create your own,
 
 1) Create NeonDB account
     - Create a new project.
@@ -35,7 +35,7 @@ This program is designed to fetch data from NeonDB which is created through Data
 4) git clone this repo
     - git clone https://github.com/BrandonC2/CECS327_SP25_9.git
 
-5) In 'Server.py', replace the NeonDB URL with your own.
+5) In 'Server.py', replace the my NeonDB URL with your own.
     - Change the names to properly fit your own in the 'match/case' section
 
 6) Get your private ip
