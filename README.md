@@ -2,7 +2,24 @@
 
 This program is designed to fetch data from NeonDB which is created through Dataniz, a website intended to create virtual IoT for experimental and demonstrational purposes.
 
-To get started,
+# To use the program (using my existing IoT from Dataniz and table from NeonDB)
+
+1) git clone this repo
+    - git clone https://github.com/BrandonC2/CECS327_SP25_9.git
+
+2) Get your private ip
+    - For Mac: ifconfig, under 'env0'
+    - For Windows: ipconfig
+
+7) To run the program:
+    - For Server: run 'python Server.py' in the proper directory, then enter the port you want to use
+    - For Client: run 'python Client.py' in the proper directory, then enter your ip, and then your port
+
+8) 'Exit' to exit or 'ctrl + c' to forcefully kill the process
+
+
+
+# To get create your own,
 
 1) Create NeonDB account
     - Create a new project.
