@@ -108,7 +108,7 @@ def client():
             print("Server Disconnect")
             break
 
-        print("Server reply: \n", packetData.decode("utf-8"))
+        print("Fetching results... \n", packetData.decode("utf-8"))
 
     # Close connection once done
     myTCPSocket.close()

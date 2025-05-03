@@ -86,7 +86,7 @@ def server():
          send to client
         """
         match someData:
-            case "1":
+            case "1": # convert the time from the database to PST
                 print("Executing query #1 \n")
                 #send query to NeonDB
                 cursor.execute("""
@@ -95,8 +95,9 @@ def server():
                     FROM "NewKitchen_virtual"
                     WHERE
                     payload->>'board_name' = 'Fridge1'
-                    AND "createdAt" >= NOW() - INTERVAL '3 hours';
+                    AND to_timestamp((payload->>'timestamp')::BIGINT) AT TIME ZONE 'UTC' AT TIME ZONE 'America/Los_Angeles' >= NOW() - INTERVAL '3 hours';
                 """)
+
                 #store the data
                 avg_moisture = cursor.fetchone()[0]
 
@@ -133,7 +134,7 @@ def server():
                         SELECT 
                             payload->>'board_name' AS device,
                             AVG((payload->>'ACS712 - Dishwasher')::FLOAT) AS electricity
-                        FROM "Kitchen_virtual"
+                        FROM "NewKitchen_virtual"
                         WHERE (payload::jsonb) ? 'ACS712 - Dishwasher'
                         GROUP BY payload->>'board_name'
                         
@@ -142,7 +143,7 @@ def server():
                         SELECT 
                             payload->>'board_name' AS device,
                             AVG((payload->>'ACS712 - Fridge2')::FLOAT) AS electricity
-                        FROM "Kitchen_virtual"
+                        FROM "NewKitchen_virtual"
                         WHERE (payload::jsonb) ? 'ACS712 - Fridge2'
                         GROUP BY payload->>'board_name'
                         
@@ -151,7 +152,7 @@ def server():
                         SELECT 
                             payload->>'board_name' AS device,
                             AVG((payload->>'ACS712 - Fridge1')::FLOAT) AS electricity
-                        FROM "Kitchen_virtual"
+                        FROM "NewKitchen_virtual"
                         WHERE (payload::jsonb) ? 'ACS712 - Fridge1'
                         GROUP BY payload->>'board_name'
                     ) AS all_data
