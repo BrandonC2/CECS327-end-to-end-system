@@ -120,9 +120,9 @@ def server():
                 """)
                 #store the data
                 avg_water = cursor.fetchone()[0]
-                # Conversion from LPM to GPM
+                # Conversion from Liters to Gallons
                 avg_water = avg_water * 0.264172
-                someData = (f"Average Dishwasher Water Per Cycle: {avg_water:.2f} GPM\n")
+                someData = (f"Average Dishwasher Water Per Cycle: {avg_water:.2f} Gallons\n")
 
             case "3":
                 print("Executing query #3 \n")
