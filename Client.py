@@ -83,20 +83,20 @@ def client():
     while running:
 
         # Send the data to the server
-        someData = input("Query to send (Enter 'EXIT' to quit): ")
+        someData = input("Query to send (Enter '4' to quit): ")
 
         # Quits when user types exit statement
-        if someData.upper() == "EXIT":
+        if someData == "4":
             print("Server Disconnect")
             break
     
         while someData not in ["1", "2", "3"]:
-            if someData.upper() == "EXIT":
+            if someData == "4":
                 print("Server Disconnect")
                 running = False
                 break
-            print("Invalid input. Please select '1', '2', or '3'.\n")
-            someData = input("Query to send (Enter 'EXIT' to quit): ")
+            print("Invalid input. Please select '1', '2', '3', or '4' to EXIT.\n")
+            someData = input("Query to send (Enter '4' to quit): ")
 
         myTCPSocket.send(bytearray(str(someData), encoding="utf-8"))
 
