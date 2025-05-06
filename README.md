@@ -2,6 +2,11 @@
 
 This program is designed to fetch data from NeonDB which is created through Dataniz, a website intended to create virtual IoT for experimental and demonstrational purposes.
 
+
+# Pre-Req
+
+1) pip install psycogy2-binary
+
 # To use the program (using my existing IoT from Dataniz and table from NeonDB)
 
 1) git clone this repo
